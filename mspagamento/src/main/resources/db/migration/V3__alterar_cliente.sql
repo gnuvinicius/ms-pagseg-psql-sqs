@@ -1,0 +1,1 @@
+ALTER TABLE tb_cliente ADD COLUMN cpf_cnpj VARCHAR(255) NOT NULL DEFAULT '';
