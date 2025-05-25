@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.garage474.mspagamento.adapter.dto.*;
 import dev.garage474.mspagamento.application.ports.output.QueueGateway;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import dev.garage474.mspagamento.application.ports.output.ClienteRepository;
@@ -27,7 +28,9 @@ public class EfetuaVendaUseCase extends AbastractUseCase<RealizaVendaRequestDTO>
     private final ProdutoRepository produtoRepository;
     private final VendaRepository vendaRepository;
     private final QueueGateway queueGateway;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    private ObjectMapper mapper;
 
     public EfetuaVendaUseCase(ClienteRepository clienteRepository,
                               VendaRepository vendaRepository,
@@ -81,7 +84,8 @@ public class EfetuaVendaUseCase extends AbastractUseCase<RealizaVendaRequestDTO>
     }
 
     private void enviaParaFilaProcessamento(Venda venda) throws JsonProcessingException {
-        String vendaJson = objectMapper.writeValueAsString(new VendaDTO().fromEntity(venda));
+        VendaDTO vendaDTO = (VendaDTO) new VendaDTO().fromEntity(venda);
+        String vendaJson = mapper.writeValueAsString(vendaDTO);
         queueGateway.enviarMensagem(vendaJson);
     }
 

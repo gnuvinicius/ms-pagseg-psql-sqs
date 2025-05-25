@@ -7,13 +7,10 @@ import dev.garage474.mspagamento.adapter.dto.pagseguro.PagSeguroOrderDTO;
 import dev.garage474.mspagamento.application.ports.output.PagSeguroGateway;
 import dev.garage474.mspagamento.application.ports.output.QueueGateway;
 import dev.garage474.mspagamento.application.ports.output.VendaRepository;
-import dev.garage474.mspagamento.infraestructure.external.PagSeguroGatewayImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 public class IniciaPagamentoUseCase extends AbastractUseCase<VendaDTO> {
@@ -36,8 +33,6 @@ public class IniciaPagamentoUseCase extends AbastractUseCase<VendaDTO> {
     @Scheduled(fixedDelay = 5000)
     @Override
     protected void executa() {
-        Map<String, String> queueMessage = queueGateway.recebeMensagem();
-
         queueGateway.recebeMensagem()
                 .forEach((receiptHandle, message) -> {
                     processaVenda(message);

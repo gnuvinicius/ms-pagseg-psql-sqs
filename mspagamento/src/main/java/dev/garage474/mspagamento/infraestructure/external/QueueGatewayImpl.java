@@ -2,13 +2,12 @@ package dev.garage474.mspagamento.infraestructure.external;
 
 import dev.garage474.mspagamento.application.ports.output.QueueGateway;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sqs.SqsClient;
-import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
-import software.amazon.awssdk.services.sqs.model.Message;
-import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
-import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
+import software.amazon.awssdk.services.sqs.model.*;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class QueueGatewayImpl implements QueueGateway {
 
+    private static final Logger log = LoggerFactory.getLogger(QueueGatewayImpl.class);
     private final SqsClient sqsClient;
 
     @Value("${aws.sqs.queue.url}")
@@ -33,7 +33,13 @@ public class QueueGatewayImpl implements QueueGateway {
                 .messageBody(message)
                 .build();
 
-        sqsClient.sendMessage(request);
+        SendMessageResponse reponse = sqsClient.sendMessage(request);
+
+        if (reponse.sdkHttpResponse().isSuccessful()) {
+            log.info("Mensagem enviada com sucesso: {}", reponse.messageId());
+        } else {
+            log.error("Erro ao enviar mensagem: {}", reponse.sdkHttpResponse().statusText());
+        }
     }
 
     @Override

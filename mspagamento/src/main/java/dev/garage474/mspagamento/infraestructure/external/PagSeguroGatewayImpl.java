@@ -17,17 +17,18 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class PagSeguroGatewayImpl implements PagSeguroGateway {
 
     private static final Logger log = LoggerFactory.getLogger(PagSeguroGatewayImpl.class);
+    public static final String AUTHORIZATION = "Authorization";
 
     @Value("${pagseguro.url.orders}")
-    private String URL_PAGSEGURO;
+    private String PAGSEGURO_URL;
+
+    @Value("${pagseguro.token}")
+    private String PAGSEGURO_TOKEN;
 
     private WebClient webClient;
 
     @Autowired
     private ObjectMapper mapper;
-
-    @Value("${pagseguro.token}")
-    private String token;
 
     @Override
     public String processarPagamento(PagSeguroOrderDTO order) {
@@ -36,7 +37,6 @@ public class PagSeguroGatewayImpl implements PagSeguroGateway {
             String requestBodyJson = this.mapper.writeValueAsString(order);
 
             PagSeguroOrderResponseDTO resposta = webClient.post()
-                    .header("Authorization", "Bearer " + token)
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(BodyInserters.fromValue(requestBodyJson))
                     .retrieve()
@@ -56,8 +56,8 @@ public class PagSeguroGatewayImpl implements PagSeguroGateway {
 
     private void buildWebClient() {
         this.webClient = WebClient.builder()
-                .baseUrl(URL_PAGSEGURO)
-                .defaultHeader("Authorization", "Bearer " + token)
+                .baseUrl(PAGSEGURO_URL)
+                .defaultHeader(AUTHORIZATION, PAGSEGURO_TOKEN)
                 .build();
     }
 }
