@@ -9,8 +9,8 @@ public enum EnumStatus {
     FINALIZADO(2, "Finalizado"),
     CANCELADO(3, "Cancelado");
 
-    private int codigo;
-    private String descricao;
+    private final int codigo;
+    private final String descricao;
 
     EnumStatus(int codigo, String descricao) {
         this.codigo = codigo;

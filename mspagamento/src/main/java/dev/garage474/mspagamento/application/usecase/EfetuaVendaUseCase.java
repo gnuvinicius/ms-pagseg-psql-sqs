@@ -81,7 +81,7 @@ public class EfetuaVendaUseCase extends AbastractUseCase<RealizaVendaRequestDTO>
     }
 
     private void enviaParaFilaProcessamento(Venda venda) throws JsonProcessingException {
-        String vendaJson = objectMapper.writeValueAsString(VendaDTO.fromEntity(venda));
+        String vendaJson = objectMapper.writeValueAsString(new VendaDTO().fromEntity(venda));
         queueGateway.enviarMensagem(vendaJson);
     }
 

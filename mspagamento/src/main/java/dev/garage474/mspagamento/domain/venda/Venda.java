@@ -1,5 +1,6 @@
 package dev.garage474.mspagamento.domain.venda;
 
+import dev.garage474.mspagamento.domain.BaseEntity;
 import dev.garage474.mspagamento.domain.cadastro.Cliente;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "tb_venda")
-public class Venda {
+public class Venda implements BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "venda_seq")

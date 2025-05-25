@@ -4,6 +4,7 @@ import dev.garage474.mspagamento.adapter.dto.RealizaVendaRequestDTO;
 import dev.garage474.mspagamento.adapter.dto.VendaDTO;
 import dev.garage474.mspagamento.application.ports.output.VendaRepository;
 import dev.garage474.mspagamento.application.usecase.EfetuaVendaUseCase;
+import dev.garage474.mspagamento.domain.PaginateResult;
 import dev.garage474.mspagamento.domain.venda.Venda;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +25,10 @@ public class VendaController {
     }
 
     @GetMapping("/vendas")
-    public ResponseEntity<?> getVendas() {
-        List<Venda> vendas = vendaRepository.listarVendas();
-        var result = vendas.stream().map(VendaDTO::fromEntity).toList();
+    public ResponseEntity<?> getVendas(@RequestParam int page,
+                                       @RequestParam int size) {
+        PaginateResult<Venda, VendaDTO> result = vendaRepository
+                .listarVendas(page, size);
         return ResponseEntity.ok(result);
     }
 

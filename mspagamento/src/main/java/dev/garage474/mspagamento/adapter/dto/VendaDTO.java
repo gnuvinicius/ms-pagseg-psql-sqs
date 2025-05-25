@@ -20,7 +20,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VendaDTO extends BaseDTO {
+public class VendaDTO implements BaseDTO<Venda> {
     private Integer id;
 
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -33,7 +33,8 @@ public class VendaDTO extends BaseDTO {
     private ClienteDTO cliente;
     private List<ItemVendaResponseDTO> items;
 
-    public static VendaDTO fromEntity(Venda venda) {
+    @Override
+    public BaseDTO<Venda> fromEntity(Venda venda) {
         return VendaDTO.builder()
                 .id(venda.getId())
                 .dataVenda(venda.getDataVenda())
@@ -42,17 +43,5 @@ public class VendaDTO extends BaseDTO {
                 .formaPagamento(venda.getFormaPagamento())
                 .items(ItemVendaResponseDTO.listFromEntity(venda.getItensVenda()))
                 .build();
-    }
-
-    @Override
-    public String toString() {
-        return "VendaDTO{" +
-                "id=" + id +
-                ", dataVenda=" + dataVenda +
-                ", formaPagamento=" + formaPagamento +
-                ", valorTotal=" + valorTotal +
-                ", cliente=" + cliente +
-                ", items=" + items +
-                '}';
     }
 }

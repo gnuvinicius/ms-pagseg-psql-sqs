@@ -1,7 +1,7 @@
 package dev.garage474.mspagamento.application.ports.output;
 
-import dev.garage474.mspagamento.adapter.dto.VendaDTO;
+import dev.garage474.mspagamento.adapter.dto.pagseguro.PagSeguroOrderDTO;
 
 public interface PagSeguroGateway {
-    String processarPagamento(VendaDTO venda);
+    String processarPagamento(PagSeguroOrderDTO order);
 }

@@ -11,7 +11,4 @@ public class PagSeguroOrderResponseDTO extends PagSeguroOrderDTO {
 
     @JsonProperty("created_at")
     private String createdAt;
-
-    @JsonProperty("status-code")
-    private String statusCode;
 }
