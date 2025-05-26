@@ -19,6 +19,7 @@ CREATE TABLE tb_cliente (
     endereco_id INTEGER,
     telefone VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
+    cpf_cnpj VARCHAR(255) NOT NULL,
     CONSTRAINT fk_endereco FOREIGN KEY (endereco_id) REFERENCES tb_endereco(id)
 );
 
@@ -41,6 +42,7 @@ CREATE TABLE tb_venda (
     forma_pagamento varchar(50) NOT NULL,
     cliente_id INTEGER NOT NULL,
     num_transacao VARCHAR(255),
+    data_atualizacao TIMESTAMP NULL,
     CONSTRAINT fk_venda_cliente FOREIGN KEY (cliente_id) REFERENCES tb_cliente(id)
 );
 
@@ -55,4 +57,15 @@ CREATE TABLE tb_item_venda (
     venda_id INTEGER NOT NULL,
     CONSTRAINT fk_item_produto FOREIGN KEY (produto_id) REFERENCES tb_produto(id),
     CONSTRAINT fk_item_venda FOREIGN KEY (venda_id) REFERENCES tb_venda(id)
+);
+
+CREATE SEQUENCE historico_status_venda_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE tb_historico_status_venda (
+    id INTEGER PRIMARY KEY DEFAULT nextval('historico_status_venda_seq'),
+    venda_id INTEGER,
+    status VARCHAR(50),
+    criado_em TIMESTAMP,
+    atualizado_em TIMESTAMP,
+    CONSTRAINT fk_historico_status_venda_venda FOREIGN KEY (venda_id) REFERENCES tb_venda(id)
 );

@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,6 +18,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "tb_venda")
 public class Venda implements BaseEntity {
 
@@ -27,8 +31,13 @@ public class Venda implements BaseEntity {
     @Column(name = "valor_total")
     private BigDecimal valorTotal;
 
+    @CreatedDate
     @Column(name = "data_venda")
     private LocalDateTime dataVenda;
+
+    @LastModifiedDate
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
 
     @Column(name = "forma_pagamento")
     @Enumerated(EnumType.STRING)
@@ -46,14 +55,11 @@ public class Venda implements BaseEntity {
 
     public Venda(Cliente cliente, EnumFormaPagamento formaPagamento) {
         this.cliente = cliente;
-        this.dataVenda = LocalDateTime.now();
         this.formaPagamento = formaPagamento;
         this.valorTotal = BigDecimal.ZERO;
     }
 
     public void addItem(ItemVenda item) {
-//        var item = new ItemVenda(this, produto, quantidade);
-        // item.persist();
         this.itensVenda.add(item);
     }
 
